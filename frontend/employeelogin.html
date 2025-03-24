@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/styles.css">
+    <title>Employee Login</title>
+    <style>
+        .employee-login__container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          background-color: #F5F5F5;
+        }
+        .employee-login__form {
+          background: #FFFFFF;
+          padding: 2rem;
+          border-radius: 10px;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+          width: 100%;
+          max-width: 400px;
+          text-align: center;
+        }
+        .employee-login__form h2 {
+          margin-bottom: 1.5rem;
+          color: #4A90E2;
+        }
+        .employee-login__form input {
+          width: 100%;
+          padding: 0.75rem;
+          margin-bottom: 1rem;
+          border: 1px solid #CCCCCC;
+          border-radius: 5px;
+          font-size: 1rem;
+        }
+        .employee-login__form button {
+          width: 100%;
+          padding: 0.75rem;
+          background-color: #e7c784;
+          color: #FFFFFF;
+          border: none;
+          border-radius: 5px;
+          font-size: 1rem;
+          cursor: pointer;
+        }
+        .employee-login__form button:hover {
+          background-color: #357ABD;
+        }
+        .employee-login__form p {
+          margin-top: 1rem;
+          color: #333333;
+        }
+        .employee-login__form a {
+          color: #4A90E2;
+          text-decoration: none;
+        }
+        .employee-login__form a:hover {
+          text-decoration: underline;
+        }
+        
+      </style>
+</head>
+<body>
+    
+    <div class="employee-login__container">
+    <div class="employee-login__form">
+      <h2>Employee Login</h2>
+        <form id="login-form">
+            <label for="ssn">SSN:</label>
+            <input type="text" id="ssn" name="ssn" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">Login</button>
+        </form>
+        <div id="login-message"></div>
+    </div>
+    </div>
+    
+    <script src="./js/employeelogin.js"></script>
+</body>
+</html>

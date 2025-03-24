@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./css/styles.css" />
+  <title>Hotel Booking</title>
+</head>
+<body>
+  <nav>
+    <div class="nav__bar">
+      <div class="nav__header">
+        <div class="logo nav__logo">
+          <span>E<br />Hotel</span>
+        </div>
+        <div class="nav__menu__btn" id="menu-btn">
+          <i class="ri-menu-line"></i>
+        </div>
+      </div>
+      <ul class="nav__links" id="nav-links">
+        <li><a href="./index.html">Home</a></li>
+        <li><a href="./index.html">About</a></li>
+        <li id="auth-section">
+          <div class="dropdown" id="profile-dropdown" style="display: none;">
+            <button class="btn dropdown-toggle" id="profile-btn">
+              Profile <i class="ri-arrow-down-s-line"></i>
+            </button>
+            <div class="dropdown-content">
+              <a href="#" id="logout-btn">Log Out</a>
+            </div>
+          </div>
+          <button class="btn" id="login-btn"><a href="./login.html">Login</a></button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="header" id="home">
+    <div class="section__container header__container">
+      <h1>CHECK OUR AVAILABILITY</h1>
+    </div>
+  </header>
+
+  <section class="booking">
+    <div class="section__container booking__container">
+      <form id="availability-form">
+        <div class="input__group">
+          <label for="room-capacity">Room Capacity:</label>
+          <select id="room-capacity">
+            <option value="any">Any</option>
+          </select>
+        </div>
+
+        <div class="input__group">
+          <label for="area">Area:</label>
+          <select id="area">
+            <option value="any">Any</option>
+          </select>
+        </div>
+
+        <div class="input__group">
+          <label for="hotel-chain">Hotel Chain:</label>
+          <select id="hotel-chain">
+            <option value="any">Any</option>
+          </select>
+        </div>
+
+        <div class="input__group">
+          <label for="category">Category:</label>
+          <select id="category">
+            <option value="any">Any</option>
+          </select>
+        </div>
+
+        <div class="input__group">
+          <label for="min-price">Min Price:</label>
+          <input type="number" id="min-price" name="min-price" placeholder="Enter min price" min="0" step="10">
+        </div>
+
+        <div class="input__group">
+          <label for="max-price">Max Price:</label>
+          <input type="number" id="max-price" name="max-price" placeholder="Enter max price" min="0" step="10">
+        </div>
+
+        <button type="submit" class="btn">Check Availability</button>
+      </form>
+    </div>
+  </section>
+
+  <script>
+    async function populateDropdowns() {
+      try {
+        const [hotelChains, areas, capacities, categories] = await Promise.all([
+          fetch('/api/hotel-chains').then(res => res.json()),
+          fetch('/api/areas').then(res => res.json()),
+          fetch('/api/room-capacities').then(res => res.json()),
+          fetch('/api/categories').then(res => res.json())
+        ]);
+
+        const populateSelect = (id, data, key) => {
+          const select = document.getElementById(id);
+          data.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item[key];
+            option.textContent = item[key];
+            select.appendChild(option);
+          });
+        };
+
+        populateSelect('hotel-chain', hotelChains, 'hotel_chain_name');
+        populateSelect('area', areas, 'address');
+        populateSelect('room-capacity', capacities, 'capacity');
+        populateSelect('category', categories, 'category');
+      } catch (error) {
+        console.error('Error fetching dropdown data:', error);
+      }
+    }
+
+    document.getElementById('availability-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const capacity = document.getElementById('room-capacity').value;
+      const area = document.getElementById('area').value;
+      const hotelChain = document.getElementById('hotel-chain').value;
+      const category = document.getElementById('category').value;
+      const minPrice = document.getElementById('min-price').value;
+      const maxPrice = document.getElementById('max-price').value;
+
+      try {
+        const response = await fetch(
+          `/api/rooms?capacity=${capacity}&area=${area}&hotel_chain=${hotelChain}&category=${category}&min_price=${minPrice}&max_price=${maxPrice}`
+        );
+        const rooms = await response.json();
+        displayRooms(rooms);
+      } catch (error) {
+        console.error('Error fetching rooms:', error);
+      }
+    });
+
+    function displayRooms(rooms) {
+      const resultsContainer = document.createElement('div');
+      resultsContainer.className = 'results-container';
+
+      if (rooms.length === 0) {
+        resultsContainer.innerHTML = '<p>No rooms available matching your criteria.</p>';
+      } else {
+        rooms.forEach((room) => {
+          const roomCard = document.createElement('div');
+          roomCard.className = 'room-card';
+          roomCard.innerHTML = `
+            <h3>${room.hotel_name}</h3>
+            <p><strong>Hotel Chain:</strong> ${room.hotel_chain_name}</p>
+            <p><strong>Address:</strong> ${room.address}</p>
+            <p><strong>Price:</strong> $${room.price}</p>
+            <p><strong>Capacity:</strong> ${room.capacity}</p>
+            <p><strong>View:</strong> ${room.view}</p>
+            <p><strong>Extension:</strong> ${room.extension}</p>
+            <a href="./room-details.html?id=${room.id}" class="btn">Book Now</a>
+          `;
+          resultsContainer.appendChild(roomCard);
+        });
+      }
+
+      const existingResults = document.querySelector('.results-container');
+      if (existingResults) existingResults.remove();
+      document.querySelector('.booking__container').appendChild(resultsContainer);
+    }
+
+    document.addEventListener('DOMContentLoaded', populateDropdowns);
+  </script>
+
+  <script src="./js/main.js"></script>
+</body>
+</html>

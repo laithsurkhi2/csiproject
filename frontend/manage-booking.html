@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="./css/styles.css">
+   <title>Manage Booking</title>
+   <style>
+       body {
+           font-family: Arial, sans-serif;
+           background-color: var(--extra-light);
+           color: var(--text-dark);
+           max-width: var(--max-width);
+           margin: 0 auto;
+           padding: 20px;
+       }
+       h1 {
+           color: var(--primary-color);
+       }
+       form {
+           margin-top: 20px;
+       }
+       label {
+           display: block;
+           margin-bottom: 5px;
+       }
+       p {
+           margin: 5px 0;
+           font-weight: bold;
+       }
+       input {
+           width: 100%;
+           padding: 10px;
+           margin-bottom: 10px;
+           border: 1px solid var(--text-light);
+           border-radius: 5px;
+       }
+       button {
+           background-color: var(--primary-color);
+           color: var(--white);
+           border: none;
+           padding: 10px 15px;
+           border-radius: 5px;
+           cursor: pointer;
+       }
+       button:hover {
+           background-color: var(--secondary-color);
+       }
+   </style>
+</head>
+<body>
+   <header>
+       <h1>Manage Booking</h1>
+   </header>
+   <section>
+       <form id="manage-booking-form">
+           
+           <label for="start-date">Start Date:</label>
+           <p id="start-date"></p>
+           <label for="end-date">End Date:</label>
+           <p id="end-date"></p>
+           
+           <label for="cardholder-name">Cardholder's Name:</label>
+           <input type="text" id="cardholder-name" required>
+           <label for="card-number">Card Number:</label>
+           <input type="text" id="card-number" required>
+           <label for="expiry-month">Expiry Month:</label>
+           <input type="text" id="expiry-month" required>
+           <label for="expiry-year">Expiry Year:</label>
+           <input type="text" id="expiry-year" required>
+           <label for="cvv">CVV:</label>
+           <input type="text" id="cvv" required>
+           
+           <button type="submit">Turn Booking into Rental</button>
+       </form>
+   </section>
+
+   <script>
+       const urlParams = new URLSearchParams(window.location.search);
+       const startDate = urlParams.get('start_date'); // Get the start date
+       const endDate = urlParams.get('end_date'); // Get the end date
+
+       document.getElementById('start-date').textContent = startDate;
+       document.getElementById('end-date').textContent = endDate;
+
+       document.getElementById('manage-booking-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const customerId = urlParams.get('customer_id');
+    const roomId = urlParams.get('room_id'); 
+
+    const cardholderName = document.getElementById('cardholder-name').value;
+    const cardNumber = document.getElementById('card-number').value;
+    const expiryMonth = document.getElementById('expiry-month').value;
+    const expiryYear = document.getElementById('expiry-year').value;
+    const cvv = document.getElementById('cvv').value;
+
+    console.log('Submitting form with Customer ID:', customerId, 'and Room ID:', roomId); 
+
+    if (!cardholderName || !cardNumber || !expiryMonth || !expiryYear || !cvv) {
+        alert('Please fill out all payment details.');
+        return;
+    }
+
+    fetch('/api/bookings/convert-to-rental', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ customerId, roomId }), 
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.text().then(text => { throw new Error(text) });
+        }
+        return response.json();
+    })
+    .then(data => {
+        alert(data.message || 'Booking successfully turned into rental');
+        window.location.href = 'employee.html'; 
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to convert booking to rental: ' + error.message);
+    });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Login - EHotel</title>
+ <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+ <link rel="stylesheet" href="./css/styles.css">
+ <style>
+   .employee-login__container {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     height: 100vh;
+     background-color: #F5F5F5;
+   }
+   .employee-login__form {
+     background: #FFFFFF;
+     padding: 2rem;
+     border-radius: 10px;
+     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+     width: 100%;
+     max-width: 400px;
+     text-align: center;
+   }
+   .employee-login__form h2 {
+     margin-bottom: 1.5rem;
+     color: #4A90E2;
+   }
+   .employee-login__form input {
+     width: 100%;
+     padding: 0.75rem;
+     margin-bottom: 1rem;
+     border: 1px solid #CCCCCC;
+     border-radius: 5px;
+     font-size: 1rem;
+   }
+   .employee-login__form button {
+     width: 100%;
+     padding: 0.75rem;
+     background-color: #e7c784;
+     color: #FFFFFF;
+     border: none;
+     border-radius: 5px;
+     font-size: 1rem;
+     cursor: pointer;
+   }
+   .employee-login__form button:hover {
+     background-color: #357ABD;
+   }
+   .employee-login__form p {
+     margin-top: 1rem;
+     color: #333333;
+   }
+   .employee-login__form a {
+     color: #4A90E2;
+     text-decoration: none;
+   }
+   .employee-login__form a:hover {
+     text-decoration: underline;
+   }
+ </style>
+</head>
+<body>
+ <nav>
+   <div class="nav__bar">
+     <div class="nav__header">
+       <div class="logo nav__logo">
+         <span>E<br />Hotel</span>
+       </div>
+       <div class="nav__menu__btn" id="menu-btn">
+         <i class="ri-menu-line"></i>
+       </div>
+     </div>
+     <ul class="nav__links" id="nav-links">
+       <li><a href="./index.html">Home</a></li>
+       <li><a href="./index.html">About</a></li>
+       <li id="auth-section">
+         <div class="dropdown" id="profile-dropdown" style="display: none;">
+           <button class="btn dropdown-toggle" id="profile-btn">
+             Profile <i class="ri-arrow-down-s-line"></i>
+           </button>
+           <div class="dropdown-content">
+             <a href="#" id="logout-btn">Log Out</a>
+           </div>
+         </div>
+         <button class="btn" id="login-btn"><a href="./login.html">Login</a></button>
+       </li>
+     </ul>
+   </div>
+ </nav>
+
+
+ <div class="employee-login__container">
+   <div class="employee-login__form">
+     <h2>Login</h2>
+     <form id="login-form">
+       <input type="email" name="email" placeholder="Email" required />
+       <input type="password" name="password" placeholder="Password" required />
+       <button type="submit">Login</button>
+     </form>
+     <p>Not a customer? <a href="./employeelogin.html">Employee Login</a></p>
+   </div>
+ </div>
+
+
+ <script>
+   function handleLogin() {
+     localStorage.setItem("isLoggedIn", "true");
+     window.location.href = "index.html";
+   }
+
+
+   document.getElementById("login-form").addEventListener("submit", function (event) {
+     event.preventDefault();
+     handleLogin();
+   });
+ </script>
+ 
+
+
+</body>
+</html>

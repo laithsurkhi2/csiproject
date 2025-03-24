@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="./css/styles.css">
+   <title>Room Details</title>
+</head>
+<body>
+
+
+   <section class="room-details">
+       <div class="container">
+           <h1>Room Details</h1>
+           <p><strong>Room ID:</strong> <span id="room-id">101</span></p>
+           <p><strong>Hotel Chain:</strong> <span id="hotel-chain">Luxury Stay</span></p>
+           <p><strong>Stars:</strong> <span id="stars">5</span></p>
+           <p><strong>Price per Night:</strong> $<span id="price">200</span></p>
+           <p><strong>Capacity:</strong> <span id="capacity">2</span></p>
+
+
+           <div class="date-inputs">
+               <label for="start-date">Start Date:</label>
+               <input type="date" id="start-date" required>
+              
+               <label for="end-date">End Date:</label>
+               <input type="date" id="end-date" required>
+           </div>
+
+
+           <p><strong>Total Cost:</strong> $<span id="total-cost">0</span></p>
+
+
+           <button class="btn" id="book-now" disabled>Book Now</button>
+           <p id="booking-message"></p>
+
+
+           <button class="btn" id="view-booking" style="display: none;">View Booking</button>
+
+
+           <table id="booking-details" style="display: none;">
+               <thead>
+                   <tr>
+                       <th>Room ID</th>
+                       <th>Hotel Chain</th>
+                       <th>Stars</th>
+                       <th>Location</th>
+                       <th>Price/Night</th>
+                       <th>Capacity</th>
+                       <th>Start Date</th>
+                       <th>End Date</th>
+                       <th>Total Cost</th>
+                   </tr>
+               </thead>
+               <tbody>
+                   <tr id="booking-info"></tr>
+               </tbody>
+           </table>
+
+
+           <button class="btn" id="go-back">Go Back</button>
+           <script>
+               document.getElementById("go-back").addEventListener("click", function() {
+                   window.history.back();
+               });
+           </script>
+       </div>
+   </section>
+
+
+   <script src="./js/room-details.js"></script>
+</body>
+</html>
