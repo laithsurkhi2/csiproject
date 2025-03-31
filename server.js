@@ -1,14 +1,11 @@
 const express = require('express');
 const mysql = require('mysql2');
+const config = require('./config'); 
+
 const app = express();
 const port = 3000;
 
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'laithsurkhi',
-  password: '1234567',
-  database: 'hotel_bookingg'
-});
+const db = mysql.createConnection(config);
 
 db.connect((err) => {
   if (err) {
