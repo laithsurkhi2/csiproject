@@ -67,33 +67,33 @@ document.addEventListener("DOMContentLoaded", function () {
      const maxPrice = parseFloat(document.getElementById("max-price").value) || Infinity;
 
 
-fetch('/api/rooms')
-    .then(response => response.json())
-    .then(rooms => {
+    fetch('/api/rooms')
+        .then(response => response.json())
+        .then(rooms => {
+            const filteredRooms = rooms.filter(room =>
+                (roomCapacity === "any" || room.capacity === parseInt(roomCapacity)) &&
+                (area === "any" || room.location === area) &&
+                (hotelChain === "any" || room.hotel_chain_name === hotelChain) &&
+                (category === "any" || room.stars === category) &&
+                room.price >= minPrice &&
+                room.price <= maxPrice
+            );
+
+        })
+        .catch(error => {
+            console.error("Error fetching rooms:", error);
+        });
+
+
+
         const filteredRooms = rooms.filter(room =>
-            (roomCapacity === "any" || room.capacity >= parseInt(roomCapacity)) &&
+            (roomCapacity === "any" || room.capacity === parseInt(roomCapacity)) &&
             (area === "any" || room.location === area) &&
-            (hotelChain === "any" || room.hotel_chain_name === hotelChain) &&
+            (hotelChain === "any" || room.chain === hotelChain) &&
             (category === "any" || room.stars === category) &&
             room.price >= minPrice &&
             room.price <= maxPrice
         );
-
-    })
-    .catch(error => {
-        console.error("Error fetching rooms:", error);
-    });
-
-
-
-     const filteredRooms = rooms.filter(room =>
-         (roomCapacity === "any" || room.capacity >= parseInt(roomCapacity)) &&
-         (area === "any" || room.location === area) &&
-         (hotelChain === "any" || room.chain === hotelChain) &&
-         (category === "any" || room.stars === category) &&
-         room.price >= minPrice &&
-         room.price <= maxPrice
-     );
 
 
      resultsContainer.innerHTML = "";

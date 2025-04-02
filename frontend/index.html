@@ -76,6 +76,38 @@
    </div>
  </section>
 
+ <section style="margin-bottom: 30px;">
+  <div style="display: flex; flex-direction:column; gap:10px">
+    <h2 style="text-align: center; font-weight: bold;">Learn a bit more about our hotels</h2>
+    <table id="hotel-chain-price" style="margin-left: auto;margin-right: auto;">
+      <thead>
+          <tr>
+              <th>Hotel Chain Name</th>
+              <th>Average Price</th>
+          </tr>
+      </thead>
+      <tbody>
+          <!-- Room rows will be populated here -->
+      </tbody>
+  </table>
+  </div>
+  </section>
+  <section style="margin-top: 10px; margin-bottom: 30px;">
+  <div style="display: flex; flex-direction:column; gap:10px">
+    <h2 style="text-align: center; font-weight: bold;">Enjoy a plethora of spacious suites personalized to your liking</h2>
+    <table id="hotel-capacity" style="margin-left: auto;margin-right: auto;">
+      <thead>
+          <tr>
+              <th>Hotel Name</th>
+              <th>Number of rooms</th>
+          </tr>
+      </thead>
+      <tbody>
+          <!-- Room rows will be populated here -->
+      </tbody>
+  </table>
+ </section>
+
 
   <!-- Footer -->
  <footer class="footer">
@@ -136,5 +168,51 @@
  <!-- Scripts -->
  <script src="https://unpkg.com/scrollreveal"></script>
  <script src="./js/main.js"></script>
+ <script>
+  function fetchHotelCapacities() {
+        fetch('/api/hotel-capacities', {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        .then(response => response.json())
+        .then(hotels => {
+            const hotelInfoDiv = document.getElementById('hotel-capacity').getElementsByTagName('tbody')[0];
+            hotelInfoDiv.innerHTML = hotels.map(hotel => 
+                `<tr>
+                    <td style="text-align: center">${hotel.hotel_name}</td>
+                    <td style="text-align: center">${hotel.total_capacity}</td>
+                </tr>`
+            ).join('');
+        })
+        .catch(error => {
+            console.error('Error fetching hotels:', error);
+        });
+    }
+      function fetchHotelChainAverage() {
+        fetch('/api/hotel-chains-average-prices', {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        .then(response => response.json())
+        .then(hotel_chains => {
+            const hotelChainInfoDiv = document.getElementById('hotel-chain-price').getElementsByTagName('tbody')[0];
+            hotelChainInfoDiv.innerHTML = hotel_chains.map(hotel_chain => 
+                `<tr>
+                    <td style="text-align: center">${hotel_chain.hotel_chain_name}</td>
+                    <td style="text-align: center">$CAD ${Math.round(hotel_chain.average_price* 100) / 100}</td>
+                </tr>`
+            ).join('');
+        })
+        .catch(error => {
+            console.error('Error fetching hotels:', error);
+        });
+      }
+      fetchHotelCapacities();
+      fetchHotelChainAverage();
+ </script>
 </body>
 </html>

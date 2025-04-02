@@ -73,22 +73,23 @@
            
            <button type="submit">Turn Booking into Rental</button>
        </form>
+
+       <button id="go-back">Go back</button>
    </section>
 
    <script>
        const urlParams = new URLSearchParams(window.location.search);
        const startDate = urlParams.get('start_date'); // Get the start date
        const endDate = urlParams.get('end_date'); // Get the end date
+       const customerId = urlParams.get('customer_id');
+        const roomId = urlParams.get('room_id'); 
+        const employeeSSN = urlParams.get('employee_ssn'); 
 
        document.getElementById('start-date').textContent = startDate;
        document.getElementById('end-date').textContent = endDate;
 
        document.getElementById('manage-booking-form').addEventListener('submit', function(event) {
     event.preventDefault();
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const customerId = urlParams.get('customer_id');
-    const roomId = urlParams.get('room_id'); 
 
     const cardholderName = document.getElementById('cardholder-name').value;
     const cardNumber = document.getElementById('card-number').value;
@@ -108,7 +109,7 @@
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ customerId, roomId }), 
+        body: JSON.stringify({ employeeSSN, customerId, roomId }), 
     })
     .then(response => {
         if (!response.ok) {
@@ -118,13 +119,17 @@
     })
     .then(data => {
         alert(data.message || 'Booking successfully turned into rental');
-        window.location.href = 'employee.html'; 
+        window.location.href = `employee.html?logged=${employeeSSN}`; 
     })
     .catch(error => {
         console.error('Error:', error);
         alert('Failed to convert booking to rental: ' + error.message);
     });
-});
+    });
+
+    document.getElementById("go-back").addEventListener("click", function () {
+      window.location.href=`employee.html?logged=${employeeSSN}`
+    })
 </script>
 </body>
 </html>

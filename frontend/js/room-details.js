@@ -12,6 +12,9 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log(roomDetails); 
       document.getElementById("room-id").textContent = roomDetails.id;
       document.getElementById("hotel-chain").textContent = roomDetails.hotel_chain_name;
+      document.getElementById("hotel").textContent = roomDetails.hotel_name;
+      console.log(roomDetails.hotel_address);
+      document.getElementById("address").textContent = roomDetails.hotel_address;
       document.getElementById("price").textContent = roomDetails.price;
       document.getElementById("capacity").textContent = roomDetails.capacity;
 
@@ -43,16 +46,20 @@ document.addEventListener("DOMContentLoaded", function () {
         alert("Please fill out start and end date.");
         return;
     }
+    const hotel_chain = document.getElementById("hotel-chain").textContent;
+    const hotel = document.getElementById("hotel").textContent;
+    const address = document.getElementById("address").textContent;
     const startDate = document.getElementById("start-date").value;
     const endDate = document.getElementById("end-date").value;
-    const userId = 1; // This should be dynamically set based on the logged-in user
+    const firstName = document.getElementById("first-name").value;
+    const lastName = document.getElementById("last-name").value;
 
-    fetch("/api/bookings", {
+    fetch('/api/bookings', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ roomId, startDate, endDate, userId }), // Ensure userId is valid
+      body: JSON.stringify({ roomId, hotel, address, hotel_chain, startDate, endDate, firstName, lastName}),
     })
       .then((response) => response.json())
       .then((data) => {

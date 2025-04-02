@@ -7,6 +7,9 @@
    <title>Employee Management</title>
    <style>
        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
            font-family: Arial, sans-serif;
            background-color: var(--extra-light);
            color: var(--text-dark);
@@ -14,13 +17,20 @@
            margin: 0 auto;
            padding: 20px;
        }
+       header,
        h1 {
            color: var(--primary-color);
        }
+
+       header{
+        margin: 20px;
+       }
        table {
-           width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+           width: 90%;
            border-collapse: collapse;
-           margin-top: 20px;
+           margin: 20px;
        }
        th, td {
            border: 1px solid var(--text-light);
@@ -39,6 +49,16 @@
            border-radius: 5px;
            cursor: pointer;
        }
+
+       .addition{
+        text-align: center;
+        font-size: 20px;
+        width: 300px;
+        height: fit-content;
+        padding: 20px;
+        display: block; 
+        margin: 0 auto; 
+       }
        button:hover {
            background-color: var(--secondary-color);
        }
@@ -46,30 +66,208 @@
 </head>
 <body>
    <header>
-       <h1>Manage Bookings & Rentals</h1>
+        <h2 id="greetings"></h2>
+       <h2>Manage Data</h>
    </header>
    <section>
-       <h2>List of Current Bookings</h2>
-       <table id="booking-info">
-           <thead>
-               <tr>
-                   <th>Room ID</th>
-                   <th>Customer ID</th>
-                   <th>Start Date</th>
-                   <th>End Date</th>
-                   <th>Manage Booking</th>
-               </tr>
-           </thead>
-           <tbody>
-               <!-- Booking rows will be populated here -->
-           </tbody>
-       </table>
+        <h2>Manage Bookings & Rentals</h1>
+        <section>
+            <h3>List of Current Bookings</h3>
+            <table id="booking-info">
+                <thead>
+                    <tr>
+                        <th>Room ID</th>
+                        <th>Customer ID</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Manage Booking</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Booking rows will be populated here -->
+                </tbody>
+            </table>
+        </section>
+        <section>
+            <h3>List of Current Rentals</h3>
+            <table id="rental-info">
+                <thead>
+                    <tr>
+                        <th>Rental ID</th>
+                        <th>Employee SSN</th>
+                        <th>Customer ID</th>
+                        <th>Room ID </th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rentals rows will be populated here -->
+                </tbody>
+            </table>
+        </section>
    </section>
-   <button class="btn book-btn" style="position: absolute; bottom: 20px; right: 20px;"><a href="index.html">Logout</a></button>
+   <section>
+    <h1>Manage Hotels, Customers, Employees, and Rooms</h1>
+    <section>
+        <h2>List of Employees</h2>
+        <table id="employee-info">
+            <thead>
+                <tr>
+                    <th>SSN</th>
+                    <th>First Name</th>
+                     <th>Last Name</th>
+                    <th>Position</th>
+                    <th>Manage Employee</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Booking rows will be populated here -->
+            </tbody>
+        </table>
+        <button class="addition" onclick="window.location.href='manage-info.html?new=yes&datatype=employee'">Add Employee</button>
+    </section>
+
+    <section>
+        <h2>List of Customers</h2>
+        <table id="customer-info">
+            <thead>
+                <tr>
+                    <th>Customer ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Registration Date</th>
+                    <th>Manage Customer</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Booking rows will be populated here -->
+            </tbody>
+        </table>
+        <button class="addition" onclick="window.location.href='manage-info.html?new=yes&datatype=customer'">Add Customer</button>
+    </section>
+   
+    <section>
+        <h2>List of Hotels</h2>
+        <table id="hotel-info">
+            <thead>
+                <tr>
+                    <th>Hotel Name</th>
+                    <th>Hotel Chain Name</th>
+                    <th>Address</th>
+                    <th>Category</th>
+                    <th>Manager_SSN</th>
+                    <th>Email</th>
+                    <th>Manage Hotel</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Hotel rows will be populated here -->
+            </tbody>
+        </table>
+        <button class="addition" onclick="window.location.href='manage-info.html?new=yes&datatype=hotel'">Add Hotel</button>
+    </section>
+    <section>
+        <h2>List of Rooms</h2>
+        <table id="room-info">
+            <thead>
+                <tr>
+                    <th>Room ID</th>
+                    <th>Hotel Chain Name</th>
+                    <th>Hotel Name</th>
+                    <th>Hotel Address</th>
+                    <th>Price</th>
+                    <th>Capacity</th>
+                    <th>View</th>
+                    <th>Extension</th>
+                    <th>Manage Room</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Room rows will be populated here -->
+            </tbody>
+        </table>
+        <button class="addition" onclick="window.location.href='manage-info.html?new=yes&datatype=room'">Add Room</button>
+    </section>
+    
+   <button class="btn book-btn" style="position: sticky; bottom: 20px; right: 20px;"><a href="index.html">Logout</a></button>
   
    <script>
+        
+        let logged_employee = new URLSearchParams(window.location.search).get("ssn");        
+        document.getElementById("greetings").textContent = `Welcome back, Employee ${logged_employee}`
+        
+
+        function fetchEmployees() {
+                fetch('/api/employees')
+                    .then(response => response.json())
+                    .then(employees => {
+                        const employeeInfoDiv = document.getElementById('employee-info')
+                        .getElementsByTagName('tbody')[0];
+                        employeeInfoDiv.innerHTML = employees.map(employee => `
+                                <tr>
+                                    <td>${employee.ssn}</td>
+                                    <td>${employee.first_name}</td>
+                                    <td>${employee.last_name}</td>
+                                    <td>${employee.position}</td>
+                                    <td><button class="manage-info-btn" onclick="window.location.href='manage-info.html?logged=${new URLSearchParams(window.location.search).get("ssn")}&ssn=${employee.ssn}&datatype=Employee'">Manage Employee</button></td>
+                                </tr>
+                            `).join('');
+                    })
+                    .catch(error => {
+                        console.error('Error fetching employees:', error);
+                    });
+        }
+
+        function fetchCustomers() {
+            fetch('/api/customers')
+                .then(response => response.json())
+                .then(customers => {
+                    const customerInfoDiv = document.getElementById('customer-info').getElementsByTagName('tbody')[0];
+                    customerInfoDiv.innerHTML = customers.map(customer => `
+                                <tr>
+                                    <td>${customer.id}</td>
+                                    <td>${customer.first_name}</td>
+                                    <td>${customer.last_name}</td>
+                                    <td>${customer.registration_date}</td>
+                                    <td><button class="manage-info-btn" onclick="window.location.href='manage-info.html?id=${customer.id}&datatype=Customer'">Manage Customer</button></td>
+                                </tr>
+                            `).join('');
+                })
+                .catch(error => {
+                    console.error('Error fetching customers:', error);
+                });
+        }
+
+
+        function fetchHotels() {
+        fetch('/api/hotels', {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        .then(response => response.json())
+        .then(hotels => {
+            const hotelInfoDiv = document.getElementById('hotel-info').getElementsByTagName('tbody')[0];
+            hotelInfoDiv.innerHTML = hotels.map(hotel => 
+                `<tr>
+                    <td>${hotel.name}</td>
+                    <td>${hotel.hotel_chain_name}</td>
+                    <td>${hotel.address}</td>
+                    <td>${hotel.category}</td>
+                    <td>${hotel.manager_ssn}</td>
+                    <td>${hotel.email_value}</td>
+                    <td><button class="manage-info-btn" onclick="window.location.href='manage-info.html?name=${hotel.name}&datatype=Hotel'">Manage Hotel</button></td>
+                </tr>`
+            ).join('');
+        })
+        .catch(error => {
+            console.error('Error fetching hotels:', error);
+        });
+        }
        function fetchBookings() {
-    fetch('/api/bookings')
+        fetch('/api/bookings')
         .then(response => response.json())
         .then(bookings => {
             const bookingInfoDiv = document.getElementById('booking-info').getElementsByTagName('tbody')[0];
@@ -79,17 +277,70 @@
                     <td>${booking.customer_id}</td>
                     <td>${booking.start_date}</td>
                     <td>${booking.end_date}</td>
-                    <td><button class="manage-btn" onclick="window.location.href='manage-booking.html?customer_id=${booking.customer_id}&room_id=${booking.room_id}&start_date=${booking.start_date}&end_date=${booking.end_date}'">Manage Booking</button></td>
+                    <td><button class="manage-btn" onclick="window.location.href='manage-booking.html?employee_ssn=${logged_employee}&customer_id=${booking.customer_id}&room_id=${booking.room_id}&start_date=${booking.start_date}&end_date=${booking.end_date}'">Manage Booking</button></td>
                 </tr>`
             ).join('');
         })
         .catch(error => {
             console.error('Error fetching bookings:', error);
         });
-    }
+        }
 
+        function fetchRooms() {
+        fetch('/api/rooms')
+        .then(
+            response => response.json()
+        )
+        .then(rooms => {
+            const roomInfoDiv = document.getElementById('room-info').getElementsByTagName('tbody')[0];
+            roomInfoDiv.innerHTML = rooms.map(room => 
+                `<tr>
+                    <td>${room.id}</td>
+                    <td>${room.hotel_chain_name}</td>
+                    <td>${room.hotel_name}</td>
+                    <td>${room.hotel_address}</td>
+                    <td>${room.price}</td>
+                    <td>${room.capacity}</td>
+                    <td>${room.view}</td>
+                    <td>${room.extension}</td>
+                    <td><button class="manage-info-btn" onclick="window.location.href='manage-info.html?room_id=${room.id}&datatype=Room'">Manage Room</button></td>
+                </tr>`
+            ).join('');
+        })
+        .catch(error => {
+            console.error('Error fetching rooms:', error);
+        });
+        }
+
+        function fetchRentals(){
+            fetch('/api/rentals')
+            .then(response => response.json())
+            .then(rentals => {
+                const rentalInfoDiv = document.getElementById('rental-info').getElementsByTagName('tbody')[0];
+                rentalInfoDiv.innerHTML = rentals.map(rental => 
+                    `<tr>
+                        <td>${rental.id}</td>
+                        <td>${rental.employee_ssn}</td>
+                        <td>${rental.customer_id}</td>
+                        <td>${rental.room_id}</td>
+                        <td>${rental.start_date}</td>
+                        <td>${rental.end_date}</td>
+                    </tr>`
+                ).join('');
+            })
+            .catch(error => {
+                console.error('Error fetching rentals:', error);
+            });
+        }
 // Fetch bookings when the page loads
+
 fetchBookings();
+fetchRentals();
+fetchEmployees();
+fetchCustomers();
+fetchHotels();
+fetchRooms();
+
    </script>
 </body>
 </html>

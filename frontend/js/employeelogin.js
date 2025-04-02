@@ -14,7 +14,7 @@ document.getElementById("login-form").addEventListener("submit", function(event)
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            window.location.href = "employee.html"; // Redirect to employee information page
+            window.location.href = `employee.html?ssn=${ssn}`; // Redirect to employee information page
         } else {
             document.getElementById("login-message").textContent = data.message; // Show error message
         }
